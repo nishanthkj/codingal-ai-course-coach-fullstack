@@ -1,9 +1,11 @@
 import os
 from pathlib import Path
 from datetime import timedelta
+from dotenv import load_dotenv
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
+load_dotenv(BASE_DIR / '.env')
 SECRET_KEY = "NishanthKJ"
 
 DEBUG_ENV = os.getenv("DEBUG")
@@ -11,7 +13,7 @@ DEBUG_ENV = os.getenv("DEBUG")
 if DEBUG_ENV:
     DEBUG = os.getenv("DEBUG")
 else:
-        DEBUG = True
+    DEBUG = True
 
 ALLOWED_HOSTS = ["*"]
 
@@ -82,7 +84,7 @@ DATABASE_URL = os.getenv("DATABASE_URL")
 
 if DATABASE_URL:
     DATABASES = {
-        "default": dj_database_url.config(default=DATABASE_URL)
+        "default": dj_database_url.config(default="postgres://postgres:root@localhost:5432/codingal")
     }
 else:
     DATABASES = {
