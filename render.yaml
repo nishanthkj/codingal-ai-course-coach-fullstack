@@ -1,39 +1,37 @@
-# render.yaml - converted from your docker-compose.yml
+# render.yaml - corrected
 previewsEnabled: true
 
-# Managed Postgres (replaces the 'db' service + volume)
 databases:
   - name: codingal-db
     databaseName: codingal
     engine: postgres
-    version: "17"
+    postgresMajorVersion: "17"
 
 services:
   - type: web
     name: codingal-backend
+    runtime: docker
     rootDir: backend/app
-    env: docker
-    dockerfilePath: backend/app/Dockerfile
-    plan: free
-    buildCommand: ""
-    startCommand: ""
+    dockerfilePath: Dockerfile          # relative to rootDir
+    plan: starter
+    numInstances: 1
     envVars:
       - key: DATABASE_URL
-        # Render will set this automatically to connect to the managed DB.
-        value: ""
+        value: ""                       # populated by Render after DB creation
       - key: SECRET_KEY
-        value: ""
+        sync: false
       - key: DEBUG
         value: "False"
       - key: ALLOWED_HOSTS
         value: "0.0.0.0"
       - key: PORT
         value: "8000"
-    # Use a releaseCommand to run migrations if you want
+    # optional release command to run migrations
     # releaseCommand: python manage.py migrate
 
-  - type: static
+  - type: web
     name: codingal-frontend
+    runtime: static
     rootDir: frontend
     plan: free
     buildCommand: npm install && npm run build
@@ -42,14 +40,16 @@ services:
       - key: VITE_BACKEND_URL
         value: ""
 
-# Optional: If you prefer backend as a non-docker Python service, replace above backend block with runtime: python,
-# buildCommand and startCommand accordingly.
-
-# Notes and actions you must perform in Render dashboard:
-# 1. After creating a Blueprint from this file, set SECRET_KEY, VITE_BACKEND_URL, and any other secrets in the service's
-#    Environment → Environment Variables or Secrets (do not commit secrets to git).
-# 2. The managed DB credentials will be accessible to services via DATABASE_URL automatically. If your app expects
-#    separate POSTGRES_USER / POSTGRES_PASSWORD / POSTGRES_DB envs, adapt your code or add envVars that parse DATABASE_URL.
-# 3. Volumes from docker-compose are not carried over. For persistent file storage use Render Disks or external object storage.
-# 4. PgAdmin: not included. If you want pgAdmin on Render create a separate web service with env: docker and image
-#    dpage/pgadmin4:7. Provide a disk for /var/lib/pgadmin and set PGADMIN_DEFAULT_* env vars. Be aware of security.
+  - type: web
+    name: codingal-pgadmin
+    runtime: image
+    image: dpage/pgadmin4:7
+    plan: starter
+    envVars:
+      - key: PGADMIN_DEFAULT_EMAIL
+        sync: false
+      - key: PGADMIN_DEFAULT_PASSWORD
+        sync: false
+    disks:
+      - mountPath: /var/lib/pgadmin
+        sizeGb: 10
