@@ -1,0 +1,18 @@
+[
+  {
+    "studentId": "s1",
+    "courseId": "c1",
+    "lessonId": "l5",
+    "timestamp": "2025-10-04T12:00:00Z",
+    "correctness": 0.6,
+    "hintsUsed": 1
+  },
+  {
+    "studentId": "s1",
+    "courseId": "c2",
+    "lessonId": "l2",
+    "timestamp": "2025-10-06T10:30:00Z",
+    "correctness": 0.8,
+    "hintsUsed": 0
+  }
+]
