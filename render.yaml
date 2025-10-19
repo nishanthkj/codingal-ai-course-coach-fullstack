@@ -1,11 +1,12 @@
-# render.yaml - final verified version
-previewsEnabled: true
+# render.yaml — validated against https://render.com/schema/render.yaml.json
+previews:
+  generation: automatic
 
 databases:
   - name: codingal-db
     databaseName: codingal
-    databaseType: postgres
-    postgresMajorVersion: 17
+    engine: postgres
+    postgresMajorVersion: "17"
 
 services:
   - type: web
@@ -17,7 +18,9 @@ services:
     numInstances: 1
     envVars:
       - key: DATABASE_URL
-        value: ""
+        fromDatabase:
+          name: codingal-db
+          property: connectionString
       - key: SECRET_KEY
         sync: false
       - key: DEBUG
@@ -26,7 +29,7 @@ services:
         value: "0.0.0.0"
       - key: PORT
         value: "8000"
-    # releaseCommand: python manage.py migrate
+    # preDeployCommand: python manage.py migrate
 
   - type: web
     name: codingal-frontend
@@ -34,15 +37,19 @@ services:
     rootDir: frontend
     plan: free
     buildCommand: npm install && npm run build
-    buildOutputPath: dist
+    staticPublishPath: dist
     envVars:
       - key: VITE_BACKEND_URL
-        value: ""
+        fromService:
+          name: codingal-backend
+          type: web
+          property: hostport
 
   - type: web
     name: codingal-pgadmin
-    runtime: docker
-    dockerImage: dpage/pgadmin4:7
+    runtime: image
+    image:
+      url: docker.io/dpage/pgadmin4:7
     plan: starter
     envVars:
       - key: PGADMIN_DEFAULT_EMAIL
