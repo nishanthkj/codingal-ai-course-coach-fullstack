@@ -5,8 +5,8 @@ ENV PYTHONDONTWRITEBYTECODE=1 \
 
 WORKDIR /app
 
-RUN apt-get update && apt-get install -y build-essential libpq-dev --no-install-recommends \
- && rm -rf /var/lib/apt/lists/*
+#RUN apt-get update && apt-get install -y build-essential libpq-dev --no-install-recommends \
+# && rm -rf /var/lib/apt/lists/*
 
 # context is backend/app so copy relative files
 COPY requirements.txt /app/
@@ -15,10 +15,10 @@ RUN pip install --upgrade pip \
 
 COPY . /app/
 
-COPY entrypoint.sh /entrypoint.sh
-RUN chmod +x /entrypoint.sh
+#COPY entrypoint.sh /entrypoint.sh
+#RUN chmod +x /entrypoint.sh
 
 EXPOSE 8000
-ENTRYPOINT ["/entrypoint.sh"]
+#ENTRYPOINT ["/entrypoint.sh"]
 #CMD ["gunicorn", "project.wsgi:application", "--bind", "0.0.0.0:8000", "--workers", "3"]
 CMD ["python", "manage.py", "runserver", "0.0.0.0:8000"]
