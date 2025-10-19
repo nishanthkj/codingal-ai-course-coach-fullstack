@@ -1,23 +1,23 @@
-# render.yaml - corrected
+# render.yaml - final verified version
 previewsEnabled: true
 
 databases:
   - name: codingal-db
     databaseName: codingal
-    engine: postgres
-    postgresMajorVersion: "17"
+    databaseType: postgres
+    postgresMajorVersion: 17
 
 services:
   - type: web
     name: codingal-backend
     runtime: docker
     rootDir: backend/app
-    dockerfilePath: Dockerfile          # relative to rootDir
+    dockerfilePath: Dockerfile
     plan: starter
     numInstances: 1
     envVars:
       - key: DATABASE_URL
-        value: ""                       # populated by Render after DB creation
+        value: ""
       - key: SECRET_KEY
         sync: false
       - key: DEBUG
@@ -26,7 +26,6 @@ services:
         value: "0.0.0.0"
       - key: PORT
         value: "8000"
-    # optional release command to run migrations
     # releaseCommand: python manage.py migrate
 
   - type: web
@@ -35,21 +34,18 @@ services:
     rootDir: frontend
     plan: free
     buildCommand: npm install && npm run build
-    publishPath: dist
+    buildOutputPath: dist
     envVars:
       - key: VITE_BACKEND_URL
         value: ""
 
   - type: web
     name: codingal-pgadmin
-    runtime: image
-    image: dpage/pgadmin4:7
+    runtime: docker
+    dockerImage: dpage/pgadmin4:7
     plan: starter
     envVars:
       - key: PGADMIN_DEFAULT_EMAIL
         sync: false
       - key: PGADMIN_DEFAULT_PASSWORD
         sync: false
-    disks:
-      - mountPath: /var/lib/pgadmin
-        sizeGb: 10
