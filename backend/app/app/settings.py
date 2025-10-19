@@ -80,11 +80,23 @@ WSGI_APPLICATION = "app.wsgi.application"
 
 import dj_database_url
 
-DATABASE_URL = os.getenv("DATABASE_URL")
+DEFAULT_DB = "postgres://postgres:root@127.0.0.1:5432/codingal"
+DATABASE_URL = os.getenv("DATABASE_URL", DEFAULT_DB)
 
-DATABASE = {
-    "default": dj_database_url.config(default=DATABASE_URL)
+db_conf = dj_database_url.config(default=DATABASE_URL, engine="django.db.backends.postgresql")
+
+if isinstance(db_conf, dict):
+    db_conf.setdefault("OPTIONS", {})
+    # some providers embed CLI -c params under OPTIONS['options']; remove them
+    db_conf["OPTIONS"].pop("options", None)
+
+DATABASES = {
+    "default": {
+        "ENGINE": "django.db.backends.sqlite3",
+        "NAME": BASE_DIR / "db.sqlite3",
+    }
 }
+
 
 # if DATABASE_URL:
 #     DATABASES = {
