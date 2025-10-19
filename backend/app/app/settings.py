@@ -82,21 +82,25 @@ import dj_database_url
 
 DATABASE_URL = os.getenv("DATABASE_URL")
 
-if DATABASE_URL:
-    DATABASES = {
-        "default": dj_database_url.config(default="postgres://postgres:root@localhost:5432/codingal")
-    }
-else:
-    DATABASES = {
-        "default": {
-            "ENGINE": "django.db.backends.postgresql",
-            "NAME": "codingal",
-            "USER": "postgres",
-            "PASSWORD": "root",
-            "HOST": "localhost",
-            "PORT": "5432",
-        }
-    }
+DATABASE = {
+    "default": dj_database_url.config(default=DATABASE_URL)
+}
+
+# if DATABASE_URL:
+#     DATABASES = {
+#         "default": dj_database_url.config(default="postgres://postgres:root@localhost:5432/codingal")
+#     }
+# else:
+#     DATABASES = {
+#         "default": {
+#             "ENGINE": "django.db.backends.postgresql",
+#             "NAME": "codingal",
+#             "USER": "postgres",
+#             "PASSWORD": "root",
+#             "HOST": "localhost",
+#             "PORT": "5432",
+#         }
+#     }
 
 AUTH_PASSWORD_VALIDATORS = []
 
