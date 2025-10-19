@@ -1,0 +1,13 @@
+{
+  "recommendation": { "id": 1, "title": "Continue 'Python Basics' — next lesson" },
+  "confidence": 0.82,
+  "reason_features": {
+    "progress": 0.3,
+    "recency_gap_days": 5,
+    "hint_rate": 0.2
+  },
+  "alternatives": [
+    { "id": 2, "title": "Try 'Loops' in Python" },
+    { "id": 3, "title": "Review 'Arrays' in JavaScript" }
+  ]
+}
