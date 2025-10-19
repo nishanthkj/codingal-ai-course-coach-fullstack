@@ -17,8 +17,13 @@ COPY . /app/
 
 #COPY entrypoint.sh /entrypoint.sh
 #RUN chmod +x /entrypoint.sh
-
+#python manage.py makemigrations
+#python manage.py migrate
+#python manage.py migrate --noinput
+#python manage.py seed_demo || true
+#python manage.py collectstatic --noinput || true
 EXPOSE 8000
 #ENTRYPOINT ["/entrypoint.sh"]
 #CMD ["gunicorn", "project.wsgi:application", "--bind", "0.0.0.0:8000", "--workers", "3"]
-CMD ["python", "manage.py", "runserver", "0.0.0.0:8000"]
+#CMD ["python", "manage.py", "runserver", "0.0.0.0:8000"]
+CMD ["cmd", "/C", "python manage.py makemigrations && python manage.py migrate && python manage.py migrate --noinput && python manage.py seed_demo && python manage.py collectstatic --noinput && python manage.py runserver 0.0.0.0:8000"]
