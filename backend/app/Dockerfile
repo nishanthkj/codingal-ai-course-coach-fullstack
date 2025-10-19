@@ -26,4 +26,10 @@ EXPOSE 8000
 #ENTRYPOINT ["/entrypoint.sh"]
 #CMD ["gunicorn", "project.wsgi:application", "--bind", "0.0.0.0:8000", "--workers", "3"]
 #CMD ["python", "manage.py", "runserver", "0.0.0.0:8000"]
-CMD ["cmd", "/C", "python manage.py makemigrations && python manage.py migrate && python manage.py migrate --noinput && python manage.py seed_demo && python manage.py collectstatic --noinput && python manage.py runserver 0.0.0.0:8000"]
+RUN ["python", "manage.py", "makemigrations"]
+RUN ["python", "manage.py", "migrate"]
+RUN ["python", "manage.py", "migrate", "--noinput"]
+RUN ["python", "manage.py", "seed_demo"]
+RUN ["python", "manage.py", "collectstatic", "--noinput"]
+
+CMD ["python", "manage.py", "runserver", "0.0.0.0:8000"]
