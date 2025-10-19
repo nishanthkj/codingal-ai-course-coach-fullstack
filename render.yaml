@@ -5,7 +5,6 @@ previews:
 databases:
   - name: codingal-db
     databaseName: codingal
-    engine: postgres
     postgresMajorVersion: "17"
 
 services:
