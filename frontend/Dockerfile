@@ -23,4 +23,4 @@ EXPOSE 3000
 RUN npm install -g serve
 
 # Start the app using 'serve'
-CMD ["serve", "-s", "dist", "-l", "3000"]
+CMD ["serve", "-s", "dist", "-l", "0.0.0.0:3000"]
